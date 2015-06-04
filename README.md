@@ -1,4 +1,4 @@
-# Sub_Downloader_V.1.0
+# SubDownloader V.1.0
 A one click download utility to download subtitles for a movie with <b>Guaranteed synchronisation</b><br><br>
 <h3>Why choose us? </h3>
 <ol>
@@ -15,5 +15,25 @@ A one click download utility to download subtitles for a movie with <b>Guarantee
 <h3>Installation Procedure</h3>
 <ol>
 <li> Download the software by clicking here </li>
-<li> Move the Downloaded </li>
+<li> Move the Downloaded folder "SubDownloader" to Desktop</li>
+<li> Now go to terminal and execute the following commands in the specified order - 
+  <ul>
+  <li> cd Desktop </li>
+  <li> cd SubDownloader </li>
+  <li> <b>sudo</b> bash install.sh (Provide your system password)</li>
+  </ul>
+</li>
 </ol>
+
+<h3>How to Use ? </h3>
+<ol>
+<li>Right Click on the desired movie </li>
+<li>Go to Scripts -> kipawa_sub_downloader </li>
+</ol>
+Your subtitle will be downloaded next to your movie with same name
+<b>NOTE - </b>If you are unsatisfied with subtitle, <b>Do not delete</b> the subtitle. However just download the subtitle again by following above procedure. If there exists a better subtitle, it will be downloaded
+
+
+<h3>Request to User</h3>
+For any bugs, just drop a mail at megatron6496@gmail.com. Your contribution will be mentioned.<br>
+If you like the software, please star the repository.
