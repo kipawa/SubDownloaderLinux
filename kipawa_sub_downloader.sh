@@ -3,8 +3,8 @@ IFS="
 "
 
 path=$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
-exe="/home/kipawa/SubDownloader/dist/subdwnld"
-cd /home/kipawa/SubDownloader/dist
+exe="~/Desktop/SubDownloader/dist/subdwnld"
+cd ~Desktop/SubDownloader/dist
 ./subdwnld $path
 
 #echo "Naya" > path.txt
