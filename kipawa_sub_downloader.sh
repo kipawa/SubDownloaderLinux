@@ -4,7 +4,7 @@ IFS="
 
 path=$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
 exe="~/Desktop/SubDownloader/dist/subdwnld"
-cd ~Desktop/SubDownloader/dist
+cd ~/Desktop/SubDownloader/dist
 ./subdwnld $path
 
 #echo "Naya" > path.txt
