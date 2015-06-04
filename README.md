@@ -30,10 +30,10 @@ A one click download utility to download subtitles for a movie with <b>Guarantee
 <li>Right Click on the desired movie </li>
 <li>Go to Scripts -> kipawa_sub_downloader </li>
 </ol>
-Your subtitle will be downloaded next to your movie with same name
+Your subtitle will be downloaded next to your movie with same name<br>
 <b>NOTE - </b>If you are unsatisfied with subtitle, <b>Do not delete</b> the subtitle. However just download the subtitle again by following above procedure. If there exists a better subtitle, it will be downloaded
 
 
 <h3>Request to User</h3>
-For any bugs, just drop a mail at megatron6496@gmail.com. Your contribution will be mentioned.<br>
+For any bugs, just drop a mail at megatron6496@gmail.com , your contribution will be mentioned.<br>
 If you like the software, please star the repository.
