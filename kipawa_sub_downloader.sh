@@ -4,7 +4,7 @@ IFS="
 "
 
 path=$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
-cd ~/Desktop/SubDownloader/dist
+cd ~/Desktop/SubDownloaderLinux-V.1.0/dist
 ./subdwnld $path
 
 IFS=$tmp
