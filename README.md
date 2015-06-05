@@ -21,8 +21,8 @@ A one click download utility to download subtitles for a movie with <b>Guarantee
 <li> Move the Downloaded folder "SubDownloader" to Desktop</li>
 <li> Now go to terminal and execute the following commands in the specified order - 
   <ul>
-  <li> cd Desktop </li>
-  <li> cd SubDownloader </li>
+  <li> cd ~/Desktop </li>
+  <li> cd SubDownloaderLinux-V.1.0 </li>
   <li> <b>sudo</b> bash install.sh (Provide your system password)</li>
   </ul>
 </li>
