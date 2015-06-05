@@ -18,7 +18,7 @@ A one click download utility to download subtitles for a movie with <b>Guarantee
 <h3>Installation Procedure</h3>
 <ol>
 <li> Download the software by clicking<a href = "https://github.com/kipawa/SubDownloaderLinux/archive/V.1.0.zip"> here</a> </li>
-<li> Move the Downloaded folder "SubDownloader" to Desktop</li>
+<li> Extract the downloaded .zip file to Desktop (i.e SubDownloaderLinux-V.1.0 should now be at desktop)</li>
 <li> Now go to terminal and execute the following commands in the specified order - 
   <ul>
   <li> cd ~/Desktop </li>
