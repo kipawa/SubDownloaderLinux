@@ -1,4 +1,4 @@
-# SubDownloader V.1.0
+# SubDownloaderLinux V.1.0
 A one click download utility to download subtitles for a movie with <b>Guaranteed synchronisation</b><br><br>
 <h3>Why choose us? </h3>
 <ol>
