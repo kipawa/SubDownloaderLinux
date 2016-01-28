@@ -12,7 +12,7 @@ def prog_bar(root):
     fram.pack(expand=True, fill=Tkinter.BOTH, side=Tkinter.TOP)
     lab = Tkinter.Label(fram, text="Please Wait ! We are processing your request...", height=2, font=1)
     lab.pack()
-    pb = ttk.Progressbar(fram, orient='horizontal', length = 500, mode='indeterminate')
+    pb = ttk.Progressbar(fram, orient='horizontal', length=500, mode='indeterminate')
     pb.pack()
     pb.start(50)
     root.mainloop()
@@ -26,26 +26,24 @@ def is_filetype_supported(path_to_file):
 
 
 def downloadsub(movie, root):
-
-    if is_filetype_supported(movie) == True:
+    if is_filetype_supported(movie):
 
         fil, ex = os.path.splitext(movie)
-        fil = fil+'1'
+        fil += '1'
         exists = 0
 
         for ext in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
-            sub = fil+ext
-            if os.path.exists(sub) == True:
+            sub = fil + ext
+            if os.path.exists(sub):
                 exists = 1
                 break
 
-
         if exists == 0:
             fil, ex = os.path.splitext(movie)
-            fil = fil+'2'
+            fil += '2'
             for ext in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
-                sub = fil+ext
-                if os.path.exists(sub) == True:
+                sub = fil + ext
+                if os.path.exists(sub):
                     exists = 2
                     break
 
@@ -65,17 +63,17 @@ def downloadsub(movie, root):
             res2 = opensub.downloadsub(movie)
             os.remove(sub)
     else:
-        tkMessageBox.showerror("Kipawa Sub Downloader", "This is not a movie file")
+        tkMessageBox.showerror("Kipawa Sub Downloader", "This is not a supported movie file")
 
     root.quit()
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     root = Tkinter.Tk()
     root.wm_title("Kipawa Sub Downloader")
     root.geometry('{}x{}'.format(400, 63))
     path_to_the_movie = sys.argv[1]
-    t1 = threading.Thread(target = downloadsub, args=(path_to_the_movie, root,))
+    t1 = threading.Thread(target=downloadsub, args=(path_to_the_movie, root,))
     t1.start()
     prog_bar(root)
     t1.join()

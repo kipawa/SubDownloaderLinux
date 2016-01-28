@@ -4,10 +4,9 @@ import requests
 import zipfile
 import StringIO
 import tkMessageBox
-import threading
 
 
-#Hash function for opensubtitles.org
+# Hash function for opensubtitles.org
 def hashfunc(movie):
     try:
         longlongformat = 'q'
@@ -21,34 +20,33 @@ def hashfunc(movie):
         if filesize < 65536 * 2:
             return "SizeError"
 
-        for x in range(65536//bytesize):
+        for x in range(65536 // bytesize):
             buffer = f.read(bytesize)
-            (l_value,)= struct.unpack(longlongformat, buffer)
+            (l_value,) = struct.unpack(longlongformat, buffer)
             hash += l_value
             hash = hash & 0xFFFFFFFFFFFFFFFF
 
-        f.seek(max(0,filesize-65536),0)
-        for x in range(65536//bytesize):
+        f.seek(max(0, filesize - 65536), 0)
+        for x in range(65536 // bytesize):
             buffer = f.read(bytesize)
-            (l_value,)= struct.unpack(longlongformat, buffer)
+            (l_value,) = struct.unpack(longlongformat, buffer)
             hash += l_value
             hash = hash & 0xFFFFFFFFFFFFFFFF
 
         f.close()
-        returnedhash =  "%016x" % hash
+        returnedhash = "%016x" % hash
         return returnedhash
-    except(IOError):
+    except IOError:
         return "IOError"
 
 
 def downloadsub(movie):
-    #Make conection to opensubtitles
+    # Make conection to opensubtitles
     resp = xmlrpclib.ServerProxy('http://api.opensubtitles.org/xml-rpc')
 
-
-    #Currently using third party user agent, we are trying to get our own user agent
+    # Currently using third party user agent, we are trying to get our own user agent
     try:
-        log_resp = resp.LogIn('','','en','opensubtitles-download 3.2')
+        log_resp = resp.LogIn('', '', 'en', 'opensubtitles-download 3.2')
     except Exception:
         tkMessageBox.showerror("Kipawa Sub Downloader", "Cannot connect to server! Check your connection")
         sys.exit(1)
@@ -59,12 +57,11 @@ def downloadsub(movie):
 
     hashed = hashfunc(movie)
     size = os.path.getsize(movie)
-    search_struct = []
-    search_struct.append({'sublanguageid' : 'eng', 'moviehash' : hashed, 'moviebytesize' : str(size)})
+    search_struct = [{'sublanguageid': 'eng', 'moviehash': hashed, 'moviebytesize': str(size)}]
 
     res = resp.SearchSubtitles(log_resp['token'], search_struct)
 
-    if res['data'] == False:
+    if not res['data']:
         tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles not found in database")
     else:
         link = res['data'][0]['ZipDownloadLink']
@@ -78,7 +75,7 @@ def downloadsub(movie):
             fil = os.path.splitext(movie)[0]
             if ext == '.srt' or ext == '.sub' or ext == '.ssa' or ext == '.smi' or ext == '.sbv' or ext == '.mpl':
                 z.extract(mem, tmp)
-                src = tmp+'/'+mem
+                src = tmp + '/' + mem
                 dest = fil + '2' + ext
                 os.rename(src, dest)
                 flag = 1
