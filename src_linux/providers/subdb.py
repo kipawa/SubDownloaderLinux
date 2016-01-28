@@ -1,8 +1,7 @@
 import hashlib
-import sys
 import os
 import requests
-import tkMessageBox
+
 
 #Hash function for Subdb
 def get_hash(file_path):
