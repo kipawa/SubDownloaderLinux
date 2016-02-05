@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import Tkinter
 import os
 import sys
@@ -5,7 +7,6 @@ import threading
 import tkMessageBox
 import ttk
 from src_linux.providers import opensub, subdb
-
 
 def prog_bar(root):
     fram = ttk.Frame()
@@ -19,61 +20,73 @@ def prog_bar(root):
 
 
 def is_filetype_supported(path_to_file):
-    ext = os.path.splitext(path_to_file)[1]
-    return ext in ['.webm', '.mkv', '.flv', '.vob', '.ogg', '.drc', '.mng', '.avi', '.mov', '.qt', '.wmv', '.net',
+    extension = os.path.splitext(path_to_file)[1]
+    return extension in ['.webm', '.mkv', '.flv', '.vob', '.ogg', '.drc', '.mng', '.avi', '.mov', '.qt', '.wmv', '.net',
                    '.yuv', '.rm', '.rmvb', '.asf', '.m4p', '.m4v', '.mp4', '.mpeg', '.mpg', '.mpv', '.mp2', '.m2v',
                    '.m4v', '.svi', '.3gp', '.3g2', '.mxf', '.roq', '.nsv']
 
 
-def downloadsub(movie, root):
-    if is_filetype_supported(movie):
+def downloadsub(path_to_the_movie, root_window):
 
-        fil, ex = os.path.splitext(movie)
-        fil += '1'
-        exists = 0
-
-        for ext in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
-            sub = fil + ext
-            if os.path.exists(sub):
-                exists = 1
-                break
-
-        if exists == 0:
-            fil, ex = os.path.splitext(movie)
-            fil += '2'
-            for ext in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
-                sub = fil + ext
-                if os.path.exists(sub):
-                    exists = 2
-                    break
-
-            res = subdb.downloadsub(movie)
-
-            if res == 'Success' and exists != 2:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitle Downloaded Successfully")
-            elif res == 'Success' and exists == 2:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitle Downloaded Successfully")
-                os.remove(sub)
-            elif res == 'Failed' and exists == 2:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
-            else:
-                res2 = opensub.downloadsub(movie)
-
-        else:
-            res2 = opensub.downloadsub(movie)
-            os.remove(sub)
-    else:
+    if not is_filetype_supported(path_to_the_movie):
         tkMessageBox.showerror("Kipawa Sub Downloader", "This is not a supported movie file")
+    else:
+        if subdb_subtitles_exist(path_to_the_movie):
+            try:
+                opensub.downloadsub(path_to_the_movie)
+            except Exception as e:
+                tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
+        elif opensubtitles_subs_exist(path_to_the_movie):
+            try:
+                subdb.downloadsub(path_to_the_movie)
+            except Exception as e:
+                tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
+        else:
+            try:
+                download_default_subtitles(path_to_the_movie)
+                tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesfully!")
+            except Exception as e:
+                tkMessageBox.showinfo("Kipawa Sub Downloader", "No subtitles found")
 
-    root.quit()
+    root_window.quit()
+
+
+def subdb_subtitles_exist(path_to_the_movie):
+    path_without_extension = path_without_file_extension(path_to_the_movie)
+    for subtitle_extension in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
+        subtitle_path = path_without_extension + "1" + subtitle_extension
+        if os.path.exists(subtitle_path):
+            return True
+
+    return False
+
+
+def path_without_file_extension(path_to_a_file):
+    return os.path.splitext(path_to_a_file)[0]
+
+def opensubtitles_subs_exist(path_to_the_movie):
+    path_without_extension = path_without_file_extension(path_to_the_movie)
+    for subtitle_extension in {'.srt', '.sub', '.ssa', '.smi', '.sbv', '.mpl'}:
+        subtitle_path = path_without_extension + "2" + subtitle_extension
+        if os.path.exists(subtitle_path):
+            return True
+
+    return False
+
+
+def download_default_subtitles(path_to_the_movie):
+    try:
+        subdb.downloadsub(path_to_the_movie)
+    except Exception:
+        opensub.downloadsub(path_to_the_movie)
 
 
 if __name__ == "__main__":
-    root = Tkinter.Tk()
-    root.wm_title("Kipawa Sub Downloader")
-    root.geometry('{}x{}'.format(400, 63))
+    root_window = Tkinter.Tk()
+    root_window.wm_title("Kipawa Sub Downloader")
+    root_window.geometry('{}x{}'.format(400, 63))
     path_to_the_movie = sys.argv[1]
-    t1 = threading.Thread(target=downloadsub, args=(path_to_the_movie, root,))
+    t1 = threading.Thread(target=downloadsub, args=(path_to_the_movie, root_window,))
     t1.start()
-    prog_bar(root)
+    prog_bar(root_window)
     t1.join()
