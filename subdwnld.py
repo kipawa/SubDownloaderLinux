@@ -6,7 +6,17 @@ import sys
 import threading
 import tkMessageBox
 import ttk
-from src_linux.providers import opensub, subdb
+
+from providers import opensub, subdb
+
+
+class DownloadException(Exception):
+    pass
+
+
+class SubtitlesNotAvailableException(Exception):
+    pass
+
 
 def prog_bar(root):
     fram = ttk.Frame()
@@ -34,18 +44,18 @@ def downloadsub(path_to_the_movie, root_window):
         if subdb_subtitles_exist(path_to_the_movie):
             try:
                 opensub.downloadsub(path_to_the_movie)
-            except Exception as e:
+            except SubtitlesNotAvailableException as e:
                 tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
         elif opensubtitles_subs_exist(path_to_the_movie):
             try:
                 subdb.downloadsub(path_to_the_movie)
-            except Exception as e:
+            except SubtitlesNotAvailableException as e:
                 tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
         else:
             try:
                 download_default_subtitles(path_to_the_movie)
                 tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesfully!")
-            except Exception as e:
+            except SubtitlesNotAvailableException as e:
                 tkMessageBox.showinfo("Kipawa Sub Downloader", "No subtitles found")
 
     root_window.quit()
@@ -63,6 +73,7 @@ def subdb_subtitles_exist(path_to_the_movie):
 
 def path_without_file_extension(path_to_a_file):
     return os.path.splitext(path_to_a_file)[0]
+
 
 def opensubtitles_subs_exist(path_to_the_movie):
     path_without_extension = path_without_file_extension(path_to_the_movie)
@@ -90,3 +101,5 @@ if __name__ == "__main__":
     t1.start()
     prog_bar(root_window)
     t1.join()
+
+

@@ -1,13 +1,17 @@
 import hashlib
 import os
+
 import requests
 
-class SubDbRequestError(Exception):
-    pass
+from src_linux.subdwnld import DownloadException
+
 
 # Hash function for Subdb
 
-def get_hash(file_path):
+def calculateHash(file_path):
+
+    assert file_path is not None
+
     read_size = 64 * 1024
     with open(file_path, 'rb') as f:
         data = f.read(read_size)
@@ -19,7 +23,7 @@ def get_hash(file_path):
 def downloadsub(movie):
 
     user_agent_string = {'User-Agent' : 'SubDB/1.0 (SubDownloader/1.0; http://github.com/kipawa/Sub_Downloader_V1.0)'}
-    url = "http://api.thesubdb.com/?action=download&hash=" + get_hash(movie) + "&language=en"
+    url = "http://api.thesubdb.com/?action=download&hash=" + calculateHash(movie) + "&language=en"
     req = requests.get(url, headers = user_agent_string)
 
     if req.status_code == 200:
@@ -29,4 +33,4 @@ def downloadsub(movie):
         with open(fil + "1.srt", "wb") as subtitle:
             subtitle.write(subs)
     else:
-        raise SubDbRequestError("HTTP Status: " + req.status_code)
+        raise DownloadException("HTTP Status: " + req.status_code)
