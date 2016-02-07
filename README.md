@@ -1,8 +1,10 @@
 # SubDownloaderLinux V.1.0
 A one click download utility to download subtitles for a movie with <b>Guaranteed synchronisation</b><br>
-(To view source code select "source" in Branch)<br>
+
 <a href = "https://github.com/kipawa/SubDownloaderLinux/archive/V.1.0.zip"> CLICK HERE TO DOWNLOAD </a><br>
 <br>
+Valuable contribution by - 
+<a href = "https://github.com/pabloff9"> Pablo Almeida de Andrade </a><br>
 <h3>Why choose us? </h3>
 <ol>
 <li>Since we use <b>hashing</b> to download the subtitles, we <b> guarantee synchronisation </b> with the movie </li>
