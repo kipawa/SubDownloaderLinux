@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #IFS refers to Internal Field Seperator, which is by default set to space. We must set it to new line!
 tmp=$IFS
 IFS="
