@@ -90,7 +90,7 @@ def opensubtitles_subs_exist(path_to_the_movie):
 def download_default_subtitles(path_to_the_movie):
     try:
         subdb.downloadsub(path_to_the_movie)
-    except Exception:
+    except (DownloadException, SubtitlesNotAvailableException):
         opensub.downloadsub(path_to_the_movie)
 
 
