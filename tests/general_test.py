@@ -1,5 +1,7 @@
 import unittest
-from src_linux.subdwnld import is_filetype_supported, subdb_subtitles_exist, path_without_file_extension, opensubtitles_subs_exist
+
+from subdwnld import is_filetype_supported, subdb_subtitles_exist, path_without_file_extension, opensubtitles_subs_exist
+
 
 class GeneralTests(unittest.TestCase):
 

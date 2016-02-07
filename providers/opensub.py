@@ -1,10 +1,12 @@
-import xmlrpclib
-import struct, os
-import requests
-import zipfile
 import StringIO
-from src_linux.subdwnld import DownloadException, SubtitlesNotAvailableException
+import os
+import struct
+import xmlrpclib
+import zipfile
 
+import requests
+
+from custom_exceptions import DownloadException, SubtitlesNotAvailableException
 
 # Hash function for opensubtitles.org
 def calculateHash(movie):
@@ -20,7 +22,7 @@ def calculateHash(movie):
     hash = filesize
 
     if filesize < 65536 * 2:
-        return "SizeError"
+        raise ValueError("File too small")
 
     for x in range(65536 // bytesize):
         buffer = f.read(bytesize)

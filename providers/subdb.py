@@ -1,13 +1,10 @@
 import hashlib
 import os
-
 import requests
 
-from src_linux.subdwnld import DownloadException
-
+from custom_exceptions import DownloadException
 
 # Hash function for Subdb
-
 def calculateHash(file_path):
 
     assert file_path is not None

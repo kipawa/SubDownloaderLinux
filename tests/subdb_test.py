@@ -1,6 +1,6 @@
 import unittest
 
-from providers import calculateHash
+from providers.subdb import calculateHash
 
 
 class OpenSubTest(unittest.TestCase):

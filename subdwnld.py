@@ -7,15 +7,8 @@ import threading
 import tkMessageBox
 import ttk
 
+from custom_exceptions import SubtitlesNotAvailableException, DownloadException
 from providers import opensub, subdb
-
-
-class DownloadException(Exception):
-    pass
-
-
-class SubtitlesNotAvailableException(Exception):
-    pass
 
 
 def prog_bar(root):
@@ -41,22 +34,31 @@ def downloadsub(path_to_the_movie, root_window):
     if not is_filetype_supported(path_to_the_movie):
         tkMessageBox.showerror("Kipawa Sub Downloader", "This is not a supported movie file")
     else:
-        if subdb_subtitles_exist(path_to_the_movie):
-            try:
-                opensub.downloadsub(path_to_the_movie)
-            except SubtitlesNotAvailableException as e:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
-        elif opensubtitles_subs_exist(path_to_the_movie):
-            try:
-                subdb.downloadsub(path_to_the_movie)
-            except SubtitlesNotAvailableException as e:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitle not found")
-        else:
-            try:
-                download_default_subtitles(path_to_the_movie)
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesfully!")
-            except SubtitlesNotAvailableException as e:
-                tkMessageBox.showinfo("Kipawa Sub Downloader", "No subtitles found")
+
+        try:
+            if subdb_subtitles_exist(path_to_the_movie):
+                try:
+                    subdb.downloadsub(path_to_the_movie)
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded successfully!")
+                except SubtitlesNotAvailableException:
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
+
+            elif opensubtitles_subs_exist(path_to_the_movie):
+                try:
+                    opensub.downloadsub(path_to_the_movie)
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
+                except SubtitlesNotAvailableException:
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
+            else:
+                try:
+                    download_default_subtitles(path_to_the_movie)
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
+                except SubtitlesNotAvailableException:
+                    tkMessageBox.showinfo("Kipawa Sub Downloader", "Sorry, no subtitles were found")
+
+        except DownloadException as e:
+            tkMessageBox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + e.message)
+
 
     root_window.quit()
 
