@@ -3,43 +3,42 @@ import os
 import struct
 import xmlrpclib
 import zipfile
-
 import requests
 
 from custom_exceptions import DownloadException, SubtitlesNotAvailableException
 
-# Hash function for opensubtitles.org
-def calculateHash(movie):
 
-    assert movie is not None
+# Hash function for opensubtitles.org
+def calculateHash(path_to_the_movie):
+
+    assert path_to_the_movie is not None
 
     longlongformat = 'q'
     bytesize = struct.calcsize(longlongformat)
 
-    f = open(movie, "rb")
+    f = open(path_to_the_movie, "rb")
 
-    filesize = os.path.getsize(movie)
-    hash = filesize
+    file_size = os.path.getsize(path_to_the_movie)
+    file_hash = file_size
 
-    if filesize < 65536 * 2:
+    if file_size < 65536 * 2:
         raise ValueError("File too small")
 
     for x in range(65536 // bytesize):
         buffer = f.read(bytesize)
         (l_value,) = struct.unpack(longlongformat, buffer)
-        hash += l_value
-        hash = hash & 0xFFFFFFFFFFFFFFFF
+        file_hash += l_value
+        file_hash &= 0xFFFFFFFFFFFFFFFF
 
-    f.seek(max(0, filesize - 65536), 0)
+    f.seek(max(0, file_size - 65536), 0)
     for x in range(65536 // bytesize):
         buffer = f.read(bytesize)
         (l_value,) = struct.unpack(longlongformat, buffer)
-        hash += l_value
-        hash = hash & 0xFFFFFFFFFFFFFFFF
+        file_hash += l_value
+        file_hash &= 0xFFFFFFFFFFFFFFFF
 
     f.close()
-    returnedhash = "%016x" % hash
-    return returnedhash
+    return "%016x" % file_hash
 
 
 def downloadsub(movie):
@@ -72,8 +71,9 @@ def downloadsub(movie):
         for mem in z.namelist():
             ext = os.path.splitext(mem)[1]
             fil = os.path.splitext(movie)[0]
-            if ext == '.srt' or ext == '.sub' or ext == '.ssa' or ext == '.smi' or ext == '.sbv' or ext == '.mpl':
+
+            if ext in (".srt", ".sub", ".ssa", ".smi", ".sbv", ".mpl"):
                 z.extract(mem, tmp)
                 src = tmp + '/' + mem
-                dest = fil + '2' + ext
-                os.rename(src, dest)
+                destination = fil + '2' + ext
+                os.rename(src, destination)
