@@ -1,7 +1,7 @@
-import StringIO
+import io
 import os
 import struct
-import xmlrpclib
+import xmlrpc.client
 import zipfile
 import requests
 
@@ -43,7 +43,7 @@ def calculateHash(path_to_the_movie):
 
 def downloadsub(movie):
     # Make conection to opensubtitles
-    connection = xmlrpclib.ServerProxy('http://api.opensubtitles.org/xml-rpc')
+    connection = xmlrpc.client.ServerProxy('http://api.opensubtitles.org/xml-rpc')
 
     # Currently using third party user agent, we are trying to get our own user agent
     try:
@@ -65,7 +65,7 @@ def downloadsub(movie):
     else:
         link = res['data'][0]['ZipDownloadLink']
         r = requests.get(link)
-        z = zipfile.ZipFile(StringIO.StringIO(r.content))
+        z = zipfile.ZipFile(io.StringIO(r.content))
 
         tmp = os.path.split(movie)[0]
         for mem in z.namelist():

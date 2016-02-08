@@ -15,9 +15,9 @@ class GeneralTests(unittest.TestCase):
         self.assertFalse(subdb_subtitles_exist("dummy_test_files/aFileForWhichThereIsNoSubDbSubtitle.mkv"))
 
     def test_path_without_file_extension(self):
-        self.assertEquals("afile", path_without_file_extension("afile.txt"))
-        self.assertEquals("/a/file/with/full/path", path_without_file_extension("/a/file/with/full/path.mkv"))
-        self.assertEquals( "a/file/without/extension", path_without_file_extension("a/file/without/extension"))
+        self.assertEqual("afile", path_without_file_extension("afile.txt"))
+        self.assertEqual("/a/file/with/full/path", path_without_file_extension("/a/file/with/full/path.mkv"))
+        self.assertEqual( "a/file/without/extension", path_without_file_extension("a/file/without/extension"))
 
     def test_opensubtitles_subs_exist(self):
         self.assertTrue(opensubtitles_subs_exist("dummy_test_files/aFileForWhichThereIsOpenSubtitlesSubs.mkv"))
