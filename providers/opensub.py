@@ -9,7 +9,7 @@ from custom_exceptions import DownloadException, SubtitlesNotAvailableException
 
 
 # Hash function for opensubtitles.org
-def calculateHash(path_to_the_movie):
+def calculate_hash(path_to_the_movie) -> str:
 
     assert path_to_the_movie is not None
 
@@ -41,7 +41,7 @@ def calculateHash(path_to_the_movie):
     return "%016x" % file_hash
 
 
-def downloadsub(movie):
+def downloadsub(movie) -> None:
     # Make conection to opensubtitles
     connection = xmlrpc.client.ServerProxy('http://api.opensubtitles.org/xml-rpc')
 
@@ -54,7 +54,7 @@ def downloadsub(movie):
     if login_response['status'] != '200 OK':
         raise DownloadException("The server refused the connection")
 
-    hashed = calculateHash(movie)
+    hashed = calculate_hash(movie)
     size = os.path.getsize(movie)
     search_struct = [{'sublanguageid': 'eng', 'moviehash': hashed, 'moviebytesize': str(size)}]
 
