@@ -1,7 +1,7 @@
-import StringIO
+import io
 import os
 import struct
-import xmlrpclib
+import xmlrpc.client
 import zipfile
 import requests
 
@@ -9,7 +9,7 @@ from custom_exceptions import DownloadException, SubtitlesNotAvailableException
 
 
 # Hash function for opensubtitles.org
-def calculateHash(path_to_the_movie):
+def calculate_hash(path_to_the_movie) -> str:
 
     assert path_to_the_movie is not None
 
@@ -41,9 +41,9 @@ def calculateHash(path_to_the_movie):
     return "%016x" % file_hash
 
 
-def downloadsub(movie):
+def downloadsub(movie) -> None:
     # Make conection to opensubtitles
-    connection = xmlrpclib.ServerProxy('http://api.opensubtitles.org/xml-rpc')
+    connection = xmlrpc.client.ServerProxy('http://api.opensubtitles.org/xml-rpc')
 
     # Currently using third party user agent, we are trying to get our own user agent
     try:
@@ -54,7 +54,7 @@ def downloadsub(movie):
     if login_response['status'] != '200 OK':
         raise DownloadException("The server refused the connection")
 
-    hashed = calculateHash(movie)
+    hashed = calculate_hash(movie)
     size = os.path.getsize(movie)
     search_struct = [{'sublanguageid': 'eng', 'moviehash': hashed, 'moviebytesize': str(size)}]
 
@@ -65,7 +65,7 @@ def downloadsub(movie):
     else:
         link = res['data'][0]['ZipDownloadLink']
         r = requests.get(link)
-        z = zipfile.ZipFile(StringIO.StringIO(r.content))
+        z = zipfile.ZipFile(io.StringIO(r.content))
 
         tmp = os.path.split(movie)[0]
         for mem in z.namelist():

@@ -4,8 +4,9 @@ import requests
 
 from custom_exceptions import DownloadException
 
+
 # Hash function for Subdb
-def calculateHash(file_path):
+def calculate_hash(file_path) -> str:
 
     assert file_path is not None
 
@@ -17,17 +18,19 @@ def calculateHash(file_path):
     return hashlib.md5(data).hexdigest()
 
 
-def downloadsub(movie):
+def download_subtitles(movie) -> None:
 
-    user_agent_string = {'User-Agent' : 'SubDB/1.0 (SubDownloader/1.0; http://github.com/kipawa/Sub_Downloader_V1.0)'}
-    url = "http://api.thesubdb.com/?action=download&hash=" + calculateHash(movie) + "&language=en"
-    req = requests.get(url, headers = user_agent_string)
+    user_agent_string = {'User-Agent': 'SubDB/1.0 (SubDownloader/1.0; http://github.com/kipawa/Sub_Downloader_V1.0)'}
+    url = "http://api.thesubdb.com/?action=download&hash=" + calculate_hash(movie) + "&language=en"
+    request_result = requests.get(url, headers=user_agent_string)
 
-    if req.status_code == 200:
+    if request_result.status_code == 200:
         fil = os.path.splitext(movie)[0]
-        subs = req.text
+        subs = request_result.text
         subs = subs.encode('utf-8')
         with open(fil + "1.srt", "wb") as subtitle:
             subtitle.write(subs)
     else:
-        raise DownloadException("HTTP Status: " + req.status_code)
+        raise DownloadException("HTTP Status: " + request_result.status_code)
+
+
