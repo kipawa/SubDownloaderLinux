@@ -31,6 +31,6 @@ def download_subtitles(movie) -> None:
         with open(fil + "1.srt", "wb") as subtitle:
             subtitle.write(subs)
     else:
-        raise DownloadException("HTTP Status: " + request_result.status_code)
+        raise DownloadException("HTTP Status: " + str(request_result.status_code))
 
 

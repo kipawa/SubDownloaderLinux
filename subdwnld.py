@@ -56,7 +56,7 @@ def downloadsub(path_to_the_movie: str, root_window: tkinter.Tk) -> None:
                     tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry, no subtitles were found")
 
         except DownloadException as e:
-            tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + e.message)
+            tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + str(e))
 
     root_window.quit()
 
