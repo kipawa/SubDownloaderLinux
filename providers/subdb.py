@@ -10,6 +10,10 @@ def calculate_hash(file_path) -> str:
 
     assert file_path is not None
 
+    file_size = os.path.getsize(file_path)
+    if file_size < 65536 * 2:
+        raise ValueError("File too small")
+
     read_size = 64 * 1024
     with open(file_path, 'rb') as f:
         data = f.read(read_size)

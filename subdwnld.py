@@ -59,6 +59,8 @@ def downloadsub(root_window: tkinter.Tk) -> None:
 
             except DownloadException as e:
                 tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + str(e))
+            except ValueError as e:
+                tkinter.messagebox.showinfo("Kipawa Sub Downloader", "There is a problem with this file: " + str(e))
 
     root_window.quit()
 
