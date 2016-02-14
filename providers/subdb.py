@@ -32,5 +32,3 @@ def download_subtitles(movie) -> None:
             subtitle.write(subs)
     else:
         raise DownloadException("HTTP Status: " + str(request_result.status_code))
-
-

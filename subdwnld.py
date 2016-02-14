@@ -2,7 +2,6 @@
 
 import tkinter
 import os
-import sys
 import threading
 import tkinter.messagebox
 import tkinter.ttk
@@ -29,34 +28,37 @@ def is_filetype_supported(path_to_file: str) -> bool:
                          '.m2v', '.m4v', '.svi', '.3gp', '.3g2', '.mxf', '.roq', '.nsv']
 
 
-def downloadsub(path_to_the_movie: str, root_window: tkinter.Tk) -> None:
-    if not is_filetype_supported(path_to_the_movie):
-        tkinter.messagebox.showerror("Kipawa Sub Downloader", "This is not a supported movie file")
-    else:
+def downloadsub(root_window: tkinter.Tk) -> None:
 
-        try:
-            if subdb_subtitles_exist(path_to_the_movie):
-                try:
-                    subdb.download_subtitles(path_to_the_movie)
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded successfully!")
-                except SubtitlesNotAvailableException:
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
+    for current_path in get_selected_movie_paths():
 
-            elif opensubtitles_subs_exist(path_to_the_movie):
-                try:
-                    opensub.downloadsub(path_to_the_movie)
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
-                except SubtitlesNotAvailableException:
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
-            else:
-                try:
-                    download_default_subtitles(path_to_the_movie)
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
-                except SubtitlesNotAvailableException:
-                    tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry, no subtitles were found")
+        if not is_filetype_supported(current_path):
+            tkinter.messagebox.showerror("Kipawa Sub Downloader", "This is not a supported movie file")
+        else:
 
-        except DownloadException as e:
-            tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + str(e))
+            try:
+                if subdb_subtitles_exist(current_path):
+                    try:
+                        subdb.download_subtitles(current_path)
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded successfully!")
+                    except SubtitlesNotAvailableException:
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
+
+                elif opensubtitles_subs_exist(current_path):
+                    try:
+                        opensub.downloadsub(current_path)
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
+                    except SubtitlesNotAvailableException:
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry ! Better subtitles not found")
+                else:
+                    try:
+                        download_default_subtitles(current_path)
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Subtitles downloaded succesdfully!")
+                    except SubtitlesNotAvailableException:
+                        tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Sorry, no subtitles were found")
+
+            except DownloadException as e:
+                tkinter.messagebox.showinfo("Kipawa Sub Downloader", "Error downloading subtitles: " + str(e))
 
     root_window.quit()
 
@@ -69,6 +71,10 @@ def subdb_subtitles_exist(path_to_the_movie: str) -> bool:
             return True
 
     return False
+
+def get_selected_movie_paths():
+    #there is a empty string after the last line break
+    return os.environ["NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"].split("\n")[:-1]
 
 
 def path_without_file_extension(path_to_a_file: str) -> str:
@@ -91,13 +97,14 @@ def download_default_subtitles(path_to_the_movie: str) -> None:
     except (DownloadException, SubtitlesNotAvailableException):
         opensub.downloadsub(path_to_the_movie)
 
-
-if __name__ == "__main__":
+def main():
     root_window = tkinter.Tk()
     root_window.wm_title("Kipawa Sub Downloader")
     root_window.geometry('{}x{}'.format(400, 63))
-    path_to_the_movie = sys.argv[1]
-    t1 = threading.Thread(target=downloadsub, args=(path_to_the_movie, root_window,))
+    t1 = threading.Thread(target=downloadsub, args=(root_window,))
     t1.start()
     prog_bar(root_window)
     t1.join()
+
+if __name__ == "__main__":
+    main()
